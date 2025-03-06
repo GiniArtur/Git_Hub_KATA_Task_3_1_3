@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="side-bar(active_link)">
+    <ul class="nav nav-pills nav-fill flex-column mb-sm-auto mb-0" id="menu">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <li class="nav-item">
+                <a class="nav-link text-start" aria-current="page" href="/admin/users"
+                   th:classappend="${active_link == '/users'} ? 'active'">
+                    Admin
+                </a>
+            </li>
+        </div>
+        <li class="nav-item">
+            <a class="nav-link text-start" href="/user"
+               th:classappend="${active_link == '/user'} ? 'active'">
+                User
+            </a>
+        </li>
+    </ul>
+    <hr>
+</div>
+</body>
+</html>
