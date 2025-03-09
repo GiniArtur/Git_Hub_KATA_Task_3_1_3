@@ -27,6 +27,7 @@ public class AdminController {
         this.pageAttributeService = pageAttributeService;
     }
 
+
     @GetMapping("/users")
     public String getUsers(Principal principal, Model model) {
         pageAttributeService.addMainPageAttributes(principal, model);
