@@ -43,6 +43,10 @@ public class UserServiceImpl implements UserService {
         if (userFromDB != null) {
             return false;
         }
+        if(user.getRoles() == null || user.getRoles().isEmpty()) {
+            throw new IllegalArgumentException("User must have at least one role");
+
+        }
         List<Role> userRoles = user.getRoles().stream()
                 .map(role -> roleServiceImpl.findByName(role.getName()).orElseThrow(() ->
                         new RuntimeException("Role not found: " + role.getName())))

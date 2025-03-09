@@ -200,7 +200,7 @@
                     </br>
                     <label class="form-label fw-bold" for="role-select">Role</label>
                     <select class="form-select" id="role-select-edit-user"
-                            th:field="*{roles}" multiple>
+                            th:field="*{roles}" multiple required>
                         <option th:each="role : ${listRoles}"
                                 th:text="${role.name.split('_')[1]}"
                                 th:value="${role.id}">
@@ -242,7 +242,7 @@
                     <label class="form-label fw-bold" for="role-select">Roles</label>
                     <select class="form-select" id="role-select-delete-user"
 
-                            th:field="*{roles}" multiple disabled>
+                            th:field="*{roles}" multiple required>
                         <option th:each="role : ${listRoles}"
                                 th:text="${role.name.split('_')[1]}"
                                 th:value="${role.id}">

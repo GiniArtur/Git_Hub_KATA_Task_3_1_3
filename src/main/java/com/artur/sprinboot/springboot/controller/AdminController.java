@@ -34,9 +34,16 @@ public class AdminController {
         return "admin/user-list";
     }
     @PostMapping("/users")
-    public String createUser(@ModelAttribute("newUser") @Valid User newUser) {
-        userService.add(newUser);
-        return "redirect:/admin/users";
+    public String createUser(@ModelAttribute("newUser") @Valid User newUser, BindingResult bindingResult, Model model) {
+
+        try {
+            userService.add(newUser);
+            return "redirect:/admin/users";
+        } catch (IllegalArgumentException e) {
+            bindingResult.rejectValue("roles", "roles.invalid", e.getMessage());
+            model.addAttribute("error", e.getMessage());
+            return "admin/edit-user";
+        }
     }
 
     @GetMapping("/user-update")

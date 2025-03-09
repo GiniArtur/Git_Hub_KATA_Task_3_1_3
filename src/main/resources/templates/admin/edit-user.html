@@ -29,12 +29,15 @@
     <input type="text" id="age" th:field="*{age}" required>
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</div>
     </br>
-    <div th:each="role : ${listRoles}">
-        <label>
-            <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
-            <span th:text="${role.name}"></span>
-        </label>
-    </div>
+    <select class="form-select" id="role-select-delete-user"
+
+            th:field="*{roles}" multiple required>
+        <option th:each="role : ${listRoles}"
+                th:text="${role.name.split('_')[1]}"
+                th:value="${role.id}">
+    </select>
+    <!-- Блок для отображения ошибок -->
+    <div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Ошибка при вводе роли</div>
     </br>
     <button type="submit">update user</button>
 </form>
