@@ -30,7 +30,6 @@
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</div>
     </br>
     <select class="form-select" id="role-select-delete-user"
-
             th:field="*{roles}" multiple required>
         <option th:each="role : ${listRoles}"
                 th:text="${role.name.split('_')[1]}"

@@ -28,35 +28,34 @@ public class AdminController {
         this.userService = userService;
         this.pageAttributeService = pageAttributeService;
     }
+
     @GetMapping("/users")
     public String getUsers(Principal principal, Model model) {
         pageAttributeService.addMainPageAttributes(principal, model);
         return "admin/user-list";
     }
+
     @PostMapping("/users")
     public String createUser(@ModelAttribute("newUser") @Valid User newUser, BindingResult bindingResult, Model model) {
-
         try {
             userService.add(newUser);
             return "redirect:/admin/users";
         } catch (IllegalArgumentException e) {
-            bindingResult.rejectValue("roles", "roles.invalid", e.getMessage());
-            model.addAttribute("error", e.getMessage());
-            return "admin/edit-user";
+            bindingResult.rejectValue("roles", "roles.invalid", "Please enter a valid role");
+            model.addAttribute("error", "Please enter a valid role");
+            return "admin/user-list";
         }
     }
 
     @GetMapping("/user-update")
-    public String showFormForUpdate(@RequestParam("id") long id,
-                                    Model model) {
+    public String showFormForUpdate(@RequestParam("id") long id, Model model) {
         model.addAttribute("user", userService.readUser(id));
         model.addAttribute("listRoles", roleService.findAll());
         return "/admin/edit-user";
     }
 
     @PatchMapping("/users/edit")
-    public String editUser(@ModelAttribute("updatingUser") @Valid User updatingUser,
-                           BindingResult bindingResult, Model model, Principal principal) {
+    public String editUser(@ModelAttribute("updatingUser") @Valid User updatingUser, BindingResult bindingResult, Model model, Principal principal) {
         if (updatingUser == null) {
             logger.warning("User is null");
             model.addAttribute("error", "User data is missing");

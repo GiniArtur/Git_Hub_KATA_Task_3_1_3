@@ -71,7 +71,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--                                <tr var="user" items="${users}">-->
+                                <!-- <tr var="user" items="${users}">-->
                                 <tr th:each="user : ${users}">
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.email}"></td>
@@ -145,7 +145,7 @@
                                     </div>
                                     </br>
                                     <label class="form-label fw-bold" for="role-select">Role</label>
-                                    <select class="form-select" id="role-select" th:field="*{roles}" multiple>
+                                    <select class="form-select" id="role-select" th:field="*{roles}" multiple required>
                                         <option th:each="role : ${listRoles}"
                                                 th:text="${role.name.split('_')[1]}"
                                                 th:value="${role.id}">
@@ -205,6 +205,10 @@
                                 th:text="${role.name.split('_')[1]}"
                                 th:value="${role.id}">
                     </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
+                        error
+                    </div>
+                    </br>
                     </br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -242,7 +246,7 @@
                     <label class="form-label fw-bold" for="role-select">Roles</label>
                     <select class="form-select" id="role-select-delete-user"
 
-                            th:field="*{roles}" multiple required>
+                            th:field="*{roles}" multiple disabled>
                         <option th:each="role : ${listRoles}"
                                 th:text="${role.name.split('_')[1]}"
                                 th:value="${role.id}">

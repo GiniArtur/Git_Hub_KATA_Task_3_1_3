@@ -43,9 +43,8 @@ public class UserServiceImpl implements UserService {
         if (userFromDB != null) {
             return false;
         }
-        if(user.getRoles() == null || user.getRoles().isEmpty()) {
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
             throw new IllegalArgumentException("User must have at least one role");
-
         }
         List<Role> userRoles = user.getRoles().stream()
                 .map(role -> roleServiceImpl.findByName(role.getName()).orElseThrow(() ->
@@ -93,7 +92,6 @@ public class UserServiceImpl implements UserService {
             bindingResult.rejectValue("email", "email.exists", "This email already exists");
             log.error("Email already exists");
         }
-
         if ((user.getPassword() != null) && (!user.getPassword().isEmpty())) {
             Objects.requireNonNull(userFromDB).setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -103,7 +101,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userFromDB);
         return true;
     }
-
     @Override
     @Transactional(readOnly = true)
     public User getAuthenticatedUser(String email) {
