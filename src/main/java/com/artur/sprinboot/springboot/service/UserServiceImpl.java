@@ -4,6 +4,7 @@ import com.artur.sprinboot.springboot.model.Role;
 import com.artur.sprinboot.springboot.model.User;
 import com.artur.sprinboot.springboot.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -79,13 +82,21 @@ public class UserServiceImpl implements UserService {
         }
         User userFromDB = null;
         userFromDB = userRepository.findByEmail(user.getEmail());
+        if (userFromDB == null) {
+            log.debug("No user found for email: " + user.getEmail());
+        }
         if (userFromDB != null && (userFromDB.getId() != user.getId())) {
             bindingResult.rejectValue("email", "email.exists", "This email already exists");
+            log.error("Email already exists");
         }
-        if (userFromDB.getPassword() != null && !userFromDB.getPassword().equals(user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if ((user.getPassword() != null) && (!user.getPassword().isEmpty())) {
+            Objects.requireNonNull(userFromDB).setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        userRepository.save(user);
+        userFromDB.setRoles(user.getRoles());
+        userFromDB.setName(user.getName());
+        userFromDB.setAge(user.getAge());
+        userRepository.save(userFromDB);
         return true;
     }
 
