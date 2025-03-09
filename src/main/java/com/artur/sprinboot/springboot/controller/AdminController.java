@@ -28,14 +28,11 @@ public class AdminController {
         this.userService = userService;
         this.pageAttributeService = pageAttributeService;
     }
-
-
     @GetMapping("/users")
     public String getUsers(Principal principal, Model model) {
         pageAttributeService.addMainPageAttributes(principal, model);
         return "admin/user-list";
     }
-
     @PostMapping("/users")
     public String createUser(@ModelAttribute("newUser") @Valid User newUser) {
         this.userService.add(newUser);
@@ -56,7 +53,7 @@ public class AdminController {
         if (updatingUser == null) {
             logger.warning("User is null");
             model.addAttribute("error", "User data is missing");
-            return "/admin/user-list";
+            return "admin/user-list";
         }
         if (!userService.updateUser(updatingUser, bindingResult)) {
             logger.warning("User update failed : {}");
