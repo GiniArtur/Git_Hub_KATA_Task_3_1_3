@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/admin")
@@ -19,6 +20,7 @@ public class AdminController {
     private final RoleService roleService;
     private final UserService userService;
     private final PageAttributeService pageAttributeService;
+    private static final Logger logger = Logger.getLogger(AdminController.class.getName());
 
     @Autowired
     public AdminController(RoleService roleService, UserService userService, PageAttributeService pageAttributeService) {
@@ -51,7 +53,13 @@ public class AdminController {
     @PatchMapping("/users/edit")
     public String editUser(@ModelAttribute("updatingUser") @Valid User updatingUser,
                            BindingResult bindingResult, Model model, Principal principal) {
+        if (updatingUser == null) {
+            logger.warning("User is null");
+            model.addAttribute("error", "User data is missing");
+            return "/admin/user-list";
+        }
         if (!userService.updateUser(updatingUser, bindingResult)) {
+            logger.warning("User update failed : {}");
             pageAttributeService.addMainPageAttributes(principal, model);
             model.addAttribute("hasErrors", true);
             return "admin/user-list";
