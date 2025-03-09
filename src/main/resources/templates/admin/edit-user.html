@@ -29,12 +29,12 @@
     <input type="text" id="age" th:field="*{age}" required>
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</div>
     </br>
-    <label>
-        <th:block th:each="role: ${listRoles}">
-            <input type="checkbox" th:field="*{roles}"
-                   th:text="${role.name}" th:value="${role.id}"/>
-        </th:block>
-    </label>
+    <div th:each="role : ${listRoles}">
+        <label>
+            <input type="checkbox" th:field="*{roles}" th:value="${role.id}" />
+            <span th:text="${role.name}"></span>
+        </label>
+    </div>
     </br>
     <button type="submit">update user</button>
 </form>
